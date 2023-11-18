@@ -2084,6 +2084,11 @@ impl Disk {
     pub fn is_removable(&self) -> bool {
         self.inner.is_removable()
     }
+    
+    /// Returns the id of the disk.
+    pub fn id(&self) -> &OsStr {
+        self.inner.id()
+    }
 
     /// Updates the disk' information.
     ///

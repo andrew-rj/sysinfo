@@ -26,6 +26,7 @@ extern "C" {
     pub static kCFURLVolumeIsLocalKey: CFStringRef;
     pub static kCFURLVolumeIsInternalKey: CFStringRef;
     pub static kCFURLVolumeIsBrowsableKey: CFStringRef;
+    pub static kCFURLVolumeUUIDStringKey: CFStringRef;
 }
 
 #[cfg_attr(feature = "debug", derive(Eq, Hash, PartialEq))]

@@ -28,6 +28,7 @@ pub(crate) struct DiskInner {
     pub(crate) total_space: u64,
     pub(crate) available_space: u64,
     pub(crate) is_removable: bool,
+    pub(crate) id: OsString,
 }
 
 impl DiskInner {
@@ -57,6 +58,10 @@ impl DiskInner {
 
     pub(crate) fn is_removable(&self) -> bool {
         self.is_removable
+    }
+
+    pub(crate) fn id(&self) -> &OsStr {
+        &self.id
     }
 
     pub(crate) fn refresh(&mut self) -> bool {
@@ -137,6 +142,7 @@ unsafe fn get_list(container: &mut Vec<Disk>) {
         ffi::kCFURLVolumeNameKey,
         ffi::kCFURLVolumeIsBrowsableKey,
         ffi::kCFURLVolumeIsLocalKey,
+        ffi::kCFURLVolumeUUIDStringKey,
     ]) {
         Some(properties) => properties,
         None => {
@@ -365,6 +371,12 @@ unsafe fn new_disk(
         DictKey::Extern(ffi::kCFURLVolumeNameKey),
     )
     .map(OsString::from)?;
+    
+    let id = get_str_value(
+        disk_props.inner(),
+        DictKey::Extern(ffi::kCFURLVolumeUUIDStringKey),
+    )
+    .map(OsString::from)?;
 
     let is_removable = {
         let ejectable = get_bool_value(
@@ -427,6 +439,7 @@ unsafe fn new_disk(
             total_space,
             available_space,
             is_removable,
+            id,
         },
     })
 }
